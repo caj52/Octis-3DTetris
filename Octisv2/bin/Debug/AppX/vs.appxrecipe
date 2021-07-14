@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Machine>LAPTOP-O2VUQKTR</Machine>
+    <WindowsUser>caj52</WindowsUser>
+    <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
+    <TargetOsVersion>10.0</TargetOsVersion>
+    <TargetOsDescription>Windows 10.0</TargetOsDescription>
+    <SolutionConfiguration>Debug|AnyCPU</SolutionConfiguration>
+    <PackageArchitecture>neutral</PackageArchitecture>
+    <PackageIdentityName>14666d24-6f93-42b7-bc5e-610f836f1aca</PackageIdentityName>
+    <PackageIdentityPublisher>CN=caj52</PackageIdentityPublisher>
+    <IntermediateOutputPath>C:\Users\caj52\source\repos\Octisv2\Octisv2\bld\Debug\</IntermediateOutputPath>
+    <RemoteDeploymentType>
+    </RemoteDeploymentType>
+    <PackageRegistrationPath>
+    </PackageRegistrationPath>
+    <RemoveNonLayoutFiles>true</RemoveNonLayoutFiles>
+    <DeployOptionalPackages>false</DeployOptionalPackages>
+    <WindowsSdkPath>
+    </WindowsSdkPath>
+    <LayoutDir>C:\Users\caj52\source\repos\Octisv2\Octisv2\bin\Debug\AppX</LayoutDir>
+    <RegisteredManifestChecksum>C165E51474C434022017B4CC0E45BF35F1CAB4DDE2314F246DB176AD87D2EB4C</RegisteredManifestChecksum>
+    <RegisteredPackageMoniker>14666d24-6f93-42b7-bc5e-610f836f1aca_1.0.0.0_neutral__2z5423a6zhqzj</RegisteredPackageMoniker>
+    <RegisteredUserModeAppID>14666d24-6f93-42b7-bc5e-610f836f1aca_2z5423a6zhqzj!App</RegisteredUserModeAppID>
+    <RegisteredPackageID>14666d24-6f93-42b7-bc5e-610f836f1aca</RegisteredPackageID>
+    <RegisteredPackagePublisher>CN=caj52</RegisteredPackagePublisher>
+    <RegisteredVersion>1.0.0.0</RegisteredVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <AppXManifest Include="C:\Users\caj52\source\repos\Octisv2\Octisv2\bin\Debug\AppxManifest.xml">
+      <PackagePath>AppxManifest.xml</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+      <Modified>2021-07-14T18:44:45.668</Modified>
+    </AppXManifest>
+  </ItemGroup>
+  <ItemGroup>
+    <AppxPackagedFile Include="C:\Users\caj52\source\repos\Octisv2\Octisv2\js\octis.js">
+      <PackagePath>js\octis.js</PackagePath>
+      <Modified>2021-07-14T18:43:55.026</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\caj52\source\repos\Octisv2\Octisv2\js\three.js">
+      <PackagePath>js\three.js</PackagePath>
+      <Modified>2021-07-14T18:39:58.550</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\caj52\source\repos\Octisv2\Octisv2\Octis.html">
+      <PackagePath>Octis.html</PackagePath>
+      <Modified>2021-07-14T18:37:43.228</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\caj52\source\repos\Octisv2\Octisv2\images\LockScreenLogo.scale-200.png">
+      <PackagePath>images\LockScreenLogo.scale-200.png</PackagePath>
+      <Modified>2021-04-15T14:59:13.642</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\caj52\source\repos\Octisv2\Octisv2\images\SplashScreen.scale-200.png">
+      <PackagePath>images\SplashScreen.scale-200.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+      <Modified>2021-04-15T14:59:13.645</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\caj52\source\repos\Octisv2\Octisv2\images\Square150x150Logo.scale-200.png">
+      <PackagePath>images\Square150x150Logo.scale-200.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+      <Modified>2021-04-15T14:59:13.646</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\caj52\source\repos\Octisv2\Octisv2\images\Square44x44Logo.scale-200.png">
+      <PackagePath>images\Square44x44Logo.scale-200.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+      <Modified>2021-04-15T14:59:13.647</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\caj52\source\repos\Octisv2\Octisv2\images\Square44x44Logo.targetsize-24_altform-unplated.png">
+      <PackagePath>images\Square44x44Logo.targetsize-24_altform-unplated.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+      <Modified>2021-04-15T14:59:13.648</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\caj52\source\repos\Octisv2\Octisv2\images\StoreLogo.png">
+      <PackagePath>images\StoreLogo.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+      <Modified>2021-04-15T14:59:13.649</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\caj52\source\repos\Octisv2\Octisv2\images\Wide310x150Logo.scale-200.png">
+      <PackagePath>images\Wide310x150Logo.scale-200.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+      <Modified>2021-04-15T14:59:13.651</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\caj52\source\repos\Octisv2\Octisv2\css\default.css">
+      <PackagePath>css\default.css</PackagePath>
+      <Modified>2021-07-14T17:37:48.992</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\caj52\source\repos\Octisv2\Octisv2\bin\Debug\ReverseMap\resources.pri">
+      <PackagePath>resources.pri</PackagePath>
+      <Modified>2021-07-14T18:44:45.497</Modified>
+    </AppxPackagedFile>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+</Project>
