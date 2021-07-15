@@ -25,14 +25,8 @@
     </AppXManifest>
   </ItemGroup>
   <ItemGroup>
-    <AppxPackagedFile Include="C:\Users\caj52\source\repos\Octisv2\Octisv2\js\octis.js">
-      <PackagePath>js\octis.js</PackagePath>
-    </AppxPackagedFile>
-    <AppxPackagedFile Include="C:\Users\caj52\source\repos\Octisv2\Octisv2\js\three.js">
-      <PackagePath>js\three.js</PackagePath>
-    </AppxPackagedFile>
-    <AppxPackagedFile Include="C:\Users\caj52\source\repos\Octisv2\Octisv2\Octis.html">
-      <PackagePath>Octis.html</PackagePath>
+    <AppxPackagedFile Include="C:\Users\caj52\source\repos\Octisv2\Octisv2\index.html">
+      <PackagePath>index.html</PackagePath>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\caj52\source\repos\Octisv2\Octisv2\images\LockScreenLogo.scale-200.png">
       <PackagePath>images\LockScreenLogo.scale-200.png</PackagePath>
@@ -63,6 +57,12 @@
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\caj52\source\repos\Octisv2\Octisv2\css\default.css">
       <PackagePath>css\default.css</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\caj52\source\repos\Octisv2\Octisv2\octis.js">
+      <PackagePath>octis.js</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\caj52\source\repos\Octisv2\Octisv2\three.js">
+      <PackagePath>three.js</PackagePath>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\caj52\source\repos\Octisv2\Octisv2\bin\Debug\ReverseMap\resources.pri">
       <PackagePath>resources.pri</PackagePath>
