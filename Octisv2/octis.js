@@ -2,7 +2,6 @@
 var baseWidth = 16;
 var baseHeight = 16;
 var camposition = 0;
-var ignoreInput = false;
 var scenes = [
     new THREE.AmbientLight((intensity = 1)),
     new THREE.AmbientLight((intensity = 0.7)),
@@ -164,20 +163,15 @@ function animate()
 /////////////////////////////////////////////////////////
 function handleKeyDown(event)
 {
-    if (!ignoreInput)
-    {
         switch (event.keyCode)
         {
             case 81: // Q key
-                ignoreInput = true;
                 rotateGrid(true);
                 break;
             case 69: // E key
-                ignoreInput = true;
                 rotateGrid(false);
                 break;
         }
-    }
 }
 /////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////
