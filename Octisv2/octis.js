@@ -1,7 +1,9 @@
 ﻿var camera, camradius;
-var baseWidth = 15;
-var baseHeight = 15;
-var sceneQueue = [
+var baseWidth = 16;
+var baseHeight = 16;
+var camposition = 0;
+var ignoreInput = false;
+var scenes = [
     new THREE.AmbientLight((intensity = 1)),
     new THREE.AmbientLight((intensity = 0.7)),
     new THREE.AmbientLight((intensity = 0.5)),
@@ -10,10 +12,7 @@ var sceneQueue = [
 
 init();
 animate();
-
-
-
-
+document.addEventListener("keydown", handleKeyDown);
 //////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////
 function init()
@@ -37,38 +36,32 @@ function init()
     );
     /******************************************/
 
-    sceneMain.add(new THREE.GridHelper(16, 16, 0xffffff, 0x5499C7)); //CREATING THE BASE'S GRID
+    sceneMain.add(new THREE.GridHelper(baseWidth, baseWidth, 0x5499C7, 0x5499C7)); //CREATING THE BASE'S GRID
 
     /****************CREATING THE GRID****************/
-    var lineMaterial = new THREE.LineBasicMaterial({ color: 0x5499C7 });
-    for (x = -0.5; x <= 0.5; x++)
+    var lineCol = new THREE.LineBasicMaterial({ color: 0xffffff });//initilizing the color of the lines
+    var halfHeight = baseHeight / 2;
+    for (x = -(baseWidth / 2); x < (baseWidth / 2); x++)//each unit is == to 16/16 or basewidth/basewidth this starts from half increments...
+    // so the minimum would be -8? so thats -(basewidth/2)
     {
         // Create vertical lines
-        for (i = -14.5; i <= 14.5; i++)
+        for (i = -halfHeight; i <= halfHeight; i++)
         {
             var geometry = new THREE.Geometry();
-            geometry.vertices.push(new THREE.Vector3(x, baseHeight * 1.5 - 0.5, i));
+            geometry.vertices.push(new THREE.Vector3(x, baseHeight, i));
             geometry.vertices.push(new THREE.Vector3(x, 0, i));
-            var line = new THREE.Line(geometry, lineMaterial);
+            var line = new THREE.Line(geometry, lineCol);
             sceneMain.add(line);
         }
-        /*
         // Create horizonal lines
-        for (i = 0; i <= baseHeight * 1.5; i++)
+        /*
+        for (i = 0; i <= halfHeight * 1.5; i++)
         {
             var geometry = new THREE.Geometry();
-            if (i == baseHeight)
-            {
-                lineMaterial = new THREE.LineBasicMaterial({ color: 0xff0000 });
-            }
             geometry.vertices.push(new THREE.Vector3(x, i, -14.5));
             geometry.vertices.push(new THREE.Vector3(x, i, 14.5));
-            var line = new THREE.Line(geometry, lineMaterial);
+            var line = new THREE.Line(geometry, lineCol);
             sceneMain.add(line);
-            if (i == baseHeight)
-            {
-                lineMaterial = new THREE.LineBasicMaterial({ color: 0xffffff });
-            }
         }
         */
     }
@@ -120,7 +113,7 @@ function init()
     ambientLight.intensity = 0.2;
     sceneMain.add(ambientLight);
 
-    // Create a queue of scenes with different lighting for blocks in the queue
+
     // Scene 1 - high intensity lighting, for block in the front of the queue
     var scene1 = new THREE.Scene();
     var intensity1 = 0.8;
@@ -128,31 +121,8 @@ function init()
     var directional1 = new THREE.DirectionalLight(0xf5f5f5, intensity1);
     scene1.add(lighting1);
     scene1.add(directional1);
-    /*
-    // Scene 2 - medium intensity lighting, for block second in the queue
-    var scene2 = new THREE.Scene();
-    var intensity2 = 0.5;
-    var lighting2 = new THREE.AmbientLight(0xf5f5f5, intensity2);
-    var directional2 = new THREE.DirectionalLight(0xf5f5f5, intensity2);
-    scene2.add(lighting2);
-    scene2.add(directional2);
-
-    // Scene 3 - low intensity lighting, for block third in the queue
-    var scene3 = new THREE.Scene();
-    var intensity3 = 0.2;
-    var lighting3 = new THREE.AmbientLight(0xf5f5f5, intensity3);
-    var directional3 = new THREE.DirectionalLight(0xf5f5f5, intensity3);
-    scene3.add(lighting3);
-    scene3.add(directional3);
-    */
-
-
-
-    // Add scenes to scene queue
-    sceneQueue[0] = sceneMain;
-    sceneQueue[1] = scene1;
-  //  sceneQueue[2] = scene2;
-   // sceneQueue[3] = scene3;
+    scenes[0] = sceneMain;
+    scenes[1] = scene1;
 
 
 
@@ -184,23 +154,82 @@ function handleResize()
 function animate() 
 {
   requestAnimationFrame(animate);
-    /*
-  if (!gameOver) {
-    if (beenASecond()) {
-      if (moveDown()) {
-        updateGameOver();
-        if (!gameOver) {
-          updateQueue();
-        } else {
-          alert("Game Over!");
-        }
-      }
-    }
-  }
-  */
   // Render the current scene to the screen.
   renderer.clear();
-  for (j = 0; j < sceneQueue.length; j++) {
-    renderer.render(sceneQueue[j], camera);
+  for (j = 0; j < scenes.length; j++) {
+    renderer.render(scenes[j], camera);
   }
 }
+/////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////
+function handleKeyDown(event)
+{
+    if (!ignoreInput)
+    {
+        switch (event.keyCode)
+        {
+            case 81: // Q key
+                ignoreInput = true;
+                rotateGrid(true);
+                break;
+            case 69: // E key
+                ignoreInput = true;
+                rotateGrid(false);
+                break;
+        }
+    }
+}
+/////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////
+function rotateGrid(leftorright)//true or false
+{
+    var xstat;
+    var zstat;
+    switch (camposition)
+    {
+        case 0:
+            leftorright ? zstat = false : zstat = true;
+            xstat = false;
+            break;
+        case 1:
+            leftorright ? xstat = true : xstat = false;
+            zstat = false;
+            break;
+        case 2:
+            leftorright ? zstat = true : zstat = false;
+            xstat = true;
+            break;
+        case 3:
+            leftorright ? xstat = false : xstat = true;
+            zstat = true;
+            break;
+    }
+
+    leftorright ? camposition-- : camposition++;
+    camposition < 0 ? camposition = 3 : null;
+    camposition > 3 ? camposition = 0 : null;
+
+
+    var localx = camera.position.x;
+    var localz = camera.position.z;
+    for (x = 0; x < 50; x++)//rotation loop for smooth transitions
+    {
+        setTimeout(
+            function exec()
+            {
+                xstat ? localx++ : localx--;
+                zstat ? localz++ : localz--;
+                camera.position.set(localx, 40, localz);
+                camera.lookAt(new THREE.Vector3(0, baseHeight / 2, 0));
+                renderer.clear();
+                for (j = 0; j < scenes.length; j++)
+                {
+                    renderer.render(scenes[j], camera);
+                }
+            }
+            ,0);
+    }
+}
+
+/////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////
