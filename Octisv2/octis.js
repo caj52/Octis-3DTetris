@@ -2,6 +2,7 @@
 var baseWidth = 16;
 var baseHeight = 16;
 var halfHeight;
+var halfWidth;
 var camposition = 0;
 var run = false;
 var xstat;
@@ -14,14 +15,13 @@ var localz;
 var ignoreInput = false;
 var cyclelength = 20;//miliseconds
 var check = false;
-
+var cube;
 var scenes = [
     new THREE.AmbientLight((intensity = 1)),
     new THREE.AmbientLight((intensity = 0.7)),
     new THREE.AmbientLight((intensity = 0.5)),
     new THREE.AmbientLight((intensity = 0.2))
 ];
-
 init();
 animate();
 document.addEventListener("keydown", handleKeyDown);
@@ -29,10 +29,29 @@ document.addEventListener("keydown", handleKeyDown);
 //////////////////////////////////////////////////////////////////////
 function init()
 {
-    /************VARIABLE-INITS****************/
+ /************VARIABLE-INITS****************/
     halfHeight = baseHeight / 2;
+    halfWidth = baseWidth / 2;
 
-    /*****CAMERA VARIABLE INITIILIZATIONS******/
+    var startingBoxTop = [
+        new THREE.Vector3(-halfWidth, baseHeight, -halfWidth),
+        new THREE.Vector3(halfWidth, baseHeight, -halfWidth),
+        new THREE.Vector3(halfWidth, baseHeight, halfWidth),
+        new THREE.Vector3(-halfWidth, baseHeight, halfWidth),
+        new THREE.Vector3(-halfWidth, baseHeight, -halfWidth),
+    ];
+    var startingBoxSides = [
+        new THREE.Vector3(halfWidth, baseHeight, -halfWidth),
+        new THREE.Vector3(halfWidth, 0, -halfWidth),
+        new THREE.Vector3(-halfWidth, baseHeight, -halfWidth),
+        new THREE.Vector3(-halfWidth, 0, -halfWidth),
+        new THREE.Vector3(halfWidth, baseHeight, halfWidth),
+        new THREE.Vector3(halfWidth, 0, halfWidth),
+        new THREE.Vector3(-halfWidth, baseHeight, halfWidth),
+        new THREE.Vector3(-halfWidth, 0, halfWidth),
+    ];
+/************VARIABLE-INITS****************/
+ /*****CAMERA VARIABLE INITIILIZATIONS******/
     sceneMain = new THREE.Scene();
     camera = new THREE.PerspectiveCamera
     (
@@ -49,50 +68,35 @@ function init()
         Math.pow(camera.position.y, 2) +
         Math.pow(camera.position.z, 2)
     );
-    /******************************************/
+/******************************************/
 
+/****************CREATING THE BOX****************/
     sceneMain.add(new THREE.GridHelper(baseWidth, baseWidth, 0x5499C7, 0x5499C7)); //CREATING THE BASE'S GRID
-
-    /****************CREATING THE GRID****************/
     var lineCol = new THREE.LineBasicMaterial({ color: 0xffffff });//initilizing the color of the lines
-    /*************************************************/
 
-
-
-
-        /*
-
-    // Join front and back vertical grid with lines along the sides
-    for (z = -14.5; z <= 14.5; z = z + 29)
+    var geometry = new THREE.Geometry();
+    for (x = 0; x < startingBoxTop.length; x++)
     {
-        for (y = 1; y <= baseHeight * 1.5; y++)
-        {
-            if (y == baseHeight)
-            {
-                lineMaterial = new THREE.LineBasicMaterial({ color: 0xff0000 });
-            }
-            var geometry = new THREE.Geometry();
-            geometry.vertices.push(new THREE.Vector3(-0.5, y, z));
-            geometry.vertices.push(new THREE.Vector3(0.5, y, z));
-            var line = new THREE.Line(geometry, lineMaterial);
-            sceneMain.add(line);
-            if (y == baseHeight)
-            {
-                lineMaterial = new THREE.LineBasicMaterial({ color: 0xffffff });
-            }
-        }
+        geometry.vertices.push(startingBoxTop[x])
     }
-    // Join front and back vertical grid with lines across the top
-    for (z = -13.5; z <= 13.5; z++)
+    var line = new THREE.Line(geometry, lineCol);
+    sceneMain.add(line);
+
+    var count = 0;
+    for (x = 0; x < 4; x++)
     {
         var geometry = new THREE.Geometry();
-        geometry.vertices.push(new THREE.Vector3(-0.5, baseHeight * 1.5 - 0.5, z));
-        geometry.vertices.push(new THREE.Vector3(0.5, baseHeight * 1.5 - 0.5, z));
-        var line = new THREE.Line(geometry, lineMaterial);
+        for (y = 0; y < 2; y++)
+        {
+                geometry.vertices.push(startingBoxSides[count]);
+            console.log(x + y);
+            count++;
+        }
+        var line = new THREE.Line(geometry, lineCol);
         sceneMain.add(line);
     }
-    */
-    // Add directional lighting to scene.
+/****************CREATING THE BOX****************/
+
     var directionalLight = new THREE.DirectionalLight(0xffffff, 1.2);
     directionalLight.position.x = 10;
     directionalLight.position.y = 10;
@@ -166,6 +170,19 @@ function handleKeyDown(event)
                 break;
             case 32: //SPACE
                 createCube();
+                break;
+            case 38:
+                moveBlock('forward');
+                break;
+            case 40:
+                moveBlock('back');
+                break;
+            case 37:
+                moveBlock('left');
+                break;
+            case 39:
+                moveBlock('right');
+                break;
         }
     }
 }
@@ -236,10 +253,9 @@ function createCube()
     var geometry = new THREE.BoxGeometry(1, 1, 1);
     var col = getRandomColor();
     var material = new THREE.MeshPhongMaterial({ color: col });
-    var cube = new THREE.Mesh(geometry, material);
+    cube = new THREE.Mesh(geometry, material);
     sceneMain.add(cube);
-    cube.position.set(0, 0, 0);
-
+    cube.position.set(0, 10, 0);
 }
 /////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////
@@ -252,6 +268,26 @@ function getRandomColor()
         col += letters[Math.floor(Math.random() * 16)];
     }
     return col;
+}
+/////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////
+function moveBlock(direction)
+{
+    switch (direction)
+    {
+        case 'forward':
+            cube.position.x-=1;
+            break;
+        case 'back':
+            cube.position.x += 1;
+            break;
+        case 'left':
+            cube.position.z += 1;
+            break;
+        case 'right':
+            cube.position.z -= 1;
+            break;
+    }
 }
 /////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////
