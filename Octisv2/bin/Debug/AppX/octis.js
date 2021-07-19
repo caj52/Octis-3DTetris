@@ -13,9 +13,10 @@ var sclock;
 var localx;
 var localz;
 var ignoreInput = false;
-var cyclelength = 20;//miliseconds
+var cyclelength = 10;//miliseconds
 var check = false;
 var cube;
+var forwarddir = 'x-';
 var scenes = [
     new THREE.AmbientLight((intensity = 1)),
     new THREE.AmbientLight((intensity = 0.7)),
@@ -163,9 +164,11 @@ function handleKeyDown(event)
         switch (event.keyCode)
         {
             case 81: // Q key
+                ignoreInput = true;
                 rotateGrid(true);
                 break;
             case 69: // E key
+                ignoreInput = true;
                 rotateGrid(false);
                 break;
             case 32: //SPACE
@@ -223,7 +226,6 @@ setInterval(function isRotating()
 {
     if (run)//time based rotation loop for smooth transitions
     {
-        ignoreInput = true;
         sclock = new Date().getTime();
         if (sclock - initclock > cyclelength)
         {
@@ -231,8 +233,8 @@ setInterval(function isRotating()
         }
         if (check)
         {
-            xstat ? localx++ : localx--;
-            zstat ? localz++ : localz--;
+            xstat ? localx+=2 : localx-=2;
+            zstat ? localz+=2 : localz-=2;
             camera.position.set(localx, 40, localz);
             camera.lookAt(new THREE.Vector3(0, halfHeight, 0));
             renderer.clear();
@@ -242,7 +244,7 @@ setInterval(function isRotating()
             }
             rotcount++;
             check = false;
-            if (rotcount > 49) { run = false; ignoreInput = false; }
+            if (rotcount > 24) { run = false; ignoreInput = false; }
         }
     }
 }, 5);
@@ -276,16 +278,72 @@ function moveBlock(direction)
     switch (direction)
     {
         case 'forward':
-            cube.position.x-=1;
+            switch (camposition)
+            {
+                case 0:
+                    cube.position.x -= 1;
+                    break;
+                case 1:
+                    cube.position.z -= 1;
+                    break;
+                case 2:
+                    cube.position.x += 1;
+                    break;
+                case 3:
+                    cube.position.z += 1;
+                    break;
+            }
             break;
         case 'back':
-            cube.position.x += 1;
+            switch (camposition)
+            {
+                case 0:
+                    cube.position.x += 1;
+                    break;
+                case 1:
+                    cube.position.z += 1;
+                    break;
+                case 2:
+                    cube.position.x -= 1;
+                    break;
+                case 3:
+                    cube.position.z -= 1;
+                    break;
+            }
             break;
         case 'left':
-            cube.position.z += 1;
+            switch (camposition)
+            {
+                case 0:
+                    cube.position.z += 1;
+                    break;
+                case 1:
+                    cube.position.x -= 1;
+                    break;
+                case 2:
+                    cube.position.z -= 1;
+                    break;
+                case 3:
+                    cube.position.x += 1;
+                    break;
+            }
             break;
         case 'right':
-            cube.position.z -= 1;
+            switch (camposition)
+            {
+                case 0:
+                    cube.position.z -= 1;
+                    break;
+                case 1:
+                    cube.position.x += 1;
+                    break;
+                case 2:
+                    cube.position.z += 1;
+                    break;
+                case 3:
+                    cube.position.x -= 1;
+                    break;
+            }
             break;
     }
 }

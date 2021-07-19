@@ -79,7 +79,7 @@
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\caj52\source\repos\Octisv2\Octisv2\octis.js">
       <PackagePath>octis.js</PackagePath>
-      <Modified>2021-07-18T23:20:26.978</Modified>
+      <Modified>2021-07-19T14:06:36.654</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\caj52\source\repos\Octisv2\Octisv2\three.js">
       <PackagePath>three.js</PackagePath>
