@@ -16,7 +16,8 @@ var ignoreInput = false;
 var cyclelength = 10;//miliseconds
 var check = false;
 var cube;
-var forwarddir = 'x-';
+const pBox = new THREE.Group();
+var predictionBoxInit;
 var scenes = [
     new THREE.AmbientLight((intensity = 1)),
     new THREE.AmbientLight((intensity = 0.7)),
@@ -30,7 +31,7 @@ document.addEventListener("keydown", handleKeyDown);
 //////////////////////////////////////////////////////////////////////
 function init()
 {
- /************VARIABLE-INITS****************/
+/************VARIABLE-INITS****************/
     halfHeight = baseHeight / 2;
     halfWidth = baseWidth / 2;
 
@@ -51,7 +52,17 @@ function init()
         new THREE.Vector3(-halfWidth, baseHeight, halfWidth),
         new THREE.Vector3(-halfWidth, 0, halfWidth),
     ];
-/************VARIABLE-INITS****************/
+    predictionBoxInit = [
+        new THREE.Vector3(0, baseHeight,0),
+        new THREE.Vector3(0, 0, 0),
+        new THREE.Vector3(1, baseHeight, 0),
+        new THREE.Vector3(1, 0, 0),
+        new THREE.Vector3(1, baseHeight, 1),
+        new THREE.Vector3(1, 0, 1),
+        new THREE.Vector3(0, baseHeight, 1),
+        new THREE.Vector3(0, 0, 1),
+    ];
+/*******************************************/
  /*****CAMERA VARIABLE INITIILIZATIONS******/
     sceneMain = new THREE.Scene();
     camera = new THREE.PerspectiveCamera
@@ -69,12 +80,11 @@ function init()
         Math.pow(camera.position.y, 2) +
         Math.pow(camera.position.z, 2)
     );
-/******************************************/
+/*************************************************/
 
 /****************CREATING THE BOX****************/
     sceneMain.add(new THREE.GridHelper(baseWidth, baseWidth, 0x5499C7, 0x5499C7)); //CREATING THE BASE'S GRID
     var lineCol = new THREE.LineBasicMaterial({ color: 0xffffff });//initilizing the color of the lines
-
     var geometry = new THREE.Geometry();
     for (x = 0; x < startingBoxTop.length; x++)
     {
@@ -90,14 +100,13 @@ function init()
         for (y = 0; y < 2; y++)
         {
                 geometry.vertices.push(startingBoxSides[count]);
-            console.log(x + y);
             count++;
         }
         var line = new THREE.Line(geometry, lineCol);
         sceneMain.add(line);
     }
-/****************CREATING THE BOX****************/
-
+/***********************************************/
+/****************LIGHTING-INIT*****************/
     var directionalLight = new THREE.DirectionalLight(0xffffff, 1.2);
     directionalLight.position.x = 10;
     directionalLight.position.y = 10;
@@ -108,7 +117,6 @@ function init()
     ambientLight.intensity = 0.2;
     sceneMain.add(ambientLight);
 
-
     // Scene 1 - high intensity lighting, for block in the front of the queue
     var scene1 = new THREE.Scene();
     var intensity1 = 0.8;
@@ -118,22 +126,25 @@ function init()
     scene1.add(directional1);
     scenes[0] = sceneMain;
     scenes[1] = scene1;
-
-
-
-    // Set up the Web GL renderer.
+/************************************************/
+/***************RENDERER-INT********************/
     renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.autoClear = false;
     document.body.appendChild(renderer.domElement);
-
-
-
+/************************************************/
+        /*
+    const map = new THREE.TextureLoader().load('images/rotate.png');
+    const material = new THREE.SpriteMaterial({ map: map, color: 0xffffff });
+    const sprite = new THREE.Sprite(material);
+    sprite.scale.set(4, 2, 1)
+    sprite.position.set(20,10,20)
+    sceneMain.add(sprite);
+    */
     // Handle resizing of the browser window.
     window.addEventListener("resize", handleResize, false);
     //initialiseGame();
-
 }
 /////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////
@@ -217,35 +228,35 @@ function rotateGrid(leftorright)//true or false
     camposition > 3 ? camposition = 0 : null;
     localx = camera.position.x;
     localz = camera.position.z;
-    rotcount = 0;
     run = true;
+    rotcount = 0;
 }
 /////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////
 setInterval(function isRotating()
 {
-    if (run)//time based rotation loop for smooth transitions
+    if(run)//time based rotation loop for smooth transitions
     {
-        sclock = new Date().getTime();
-        if (sclock - initclock > cyclelength)
-        {
-            check = true;
-        }
-        if (check)
-        {
-            xstat ? localx+=2 : localx-=2;
-            zstat ? localz+=2 : localz-=2;
-            camera.position.set(localx, 40, localz);
-            camera.lookAt(new THREE.Vector3(0, halfHeight, 0));
-            renderer.clear();
-            for (j = 0; j < scenes.length; j++)
+            sclock = new Date().getTime();
+            if (sclock - initclock > cyclelength)
             {
-                renderer.render(scenes[j], camera);
+                check = true;
             }
-            rotcount++;
-            check = false;
-            if (rotcount > 24) { run = false; ignoreInput = false; }
-        }
+            if (check)
+            {
+                xstat ? localx += 2 : localx -= 2;
+                zstat ? localz += 2 : localz -= 2;
+                camera.position.set(localx, 40, localz);
+                camera.lookAt(new THREE.Vector3(0, halfHeight, 0));
+                renderer.clear();
+                for (j = 0; j < scenes.length; j++)
+                {
+                    renderer.render(scenes[j], camera);
+                }
+                rotcount++;
+                check = false;
+                if (rotcount > 24) { run = false; ignoreInput = false; }
+            }           
     }
 }, 5);
 /////////////////////////////////////////////////////////
@@ -254,10 +265,39 @@ function createCube()
 {
     var geometry = new THREE.BoxGeometry(1, 1, 1);
     var col = getRandomColor();
-    var material = new THREE.MeshPhongMaterial({ color: col });
+    const material = new THREE.MeshPhongMaterial({
+        color: col,
+        opacity: 0.5,
+        transparent: true,
+    });
     cube = new THREE.Mesh(geometry, material);
     sceneMain.add(cube);
-    cube.position.set(0, 10, 0);
+    cube.position.set(0.5, 10, 0.5);
+    createPredictionBox();
+}
+function createPredictionBox()
+{
+    var count = 0;
+    var lineCol = new THREE.LineBasicMaterial({ color: 0xffffff });
+    for (x = 0; x < 4;x++)
+    {
+        var geometry = new THREE.Geometry();
+        for (y = 0; y < 2; y++)
+        {
+            geometry.vertices.push(predictionBoxInit[count])
+            count++
+        }
+        var line = new THREE.Line(geometry, lineCol);
+        line.position = cube.position;
+        pBox.add(line); 
+    }
+    sceneMain.add(pBox);
+}
+
+function movePredictionBox()
+{
+    pBox.position.set(cube.position.x-.5, 0, cube.position.z-.5);
+
 }
 /////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////
@@ -346,6 +386,7 @@ function moveBlock(direction)
             }
             break;
     }
+    movePredictionBox();
 }
 /////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////

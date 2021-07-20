@@ -30,7 +30,7 @@ document.addEventListener("keydown", handleKeyDown);
 //////////////////////////////////////////////////////////////////////
 function init()
 {
- /************VARIABLE-INITS****************/
+/************VARIABLE-INITS****************/
     halfHeight = baseHeight / 2;
     halfWidth = baseWidth / 2;
 
@@ -51,7 +51,7 @@ function init()
         new THREE.Vector3(-halfWidth, baseHeight, halfWidth),
         new THREE.Vector3(-halfWidth, 0, halfWidth),
     ];
-/************VARIABLE-INITS****************/
+/*******************************************/
  /*****CAMERA VARIABLE INITIILIZATIONS******/
     sceneMain = new THREE.Scene();
     camera = new THREE.PerspectiveCamera
@@ -69,7 +69,7 @@ function init()
         Math.pow(camera.position.y, 2) +
         Math.pow(camera.position.z, 2)
     );
-/******************************************/
+/*************************************************/
 
 /****************CREATING THE BOX****************/
     sceneMain.add(new THREE.GridHelper(baseWidth, baseWidth, 0x5499C7, 0x5499C7)); //CREATING THE BASE'S GRID
@@ -96,8 +96,8 @@ function init()
         var line = new THREE.Line(geometry, lineCol);
         sceneMain.add(line);
     }
-/****************CREATING THE BOX****************/
-
+/***********************************************/
+/****************LIGHTING-INIT*****************/
     var directionalLight = new THREE.DirectionalLight(0xffffff, 1.2);
     directionalLight.position.x = 10;
     directionalLight.position.y = 10;
@@ -108,7 +108,6 @@ function init()
     ambientLight.intensity = 0.2;
     sceneMain.add(ambientLight);
 
-
     // Scene 1 - high intensity lighting, for block in the front of the queue
     var scene1 = new THREE.Scene();
     var intensity1 = 0.8;
@@ -118,18 +117,22 @@ function init()
     scene1.add(directional1);
     scenes[0] = sceneMain;
     scenes[1] = scene1;
-
-
-
-    // Set up the Web GL renderer.
+/************************************************/
+/***************RENDERER-INT********************/
     renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.autoClear = false;
     document.body.appendChild(renderer.domElement);
+/************************************************/
 
+    const map = new THREE.TextureLoader().load('images/rotate.png');
+    const material = new THREE.SpriteMaterial({ map: map, color: 0xffffff });
 
-
+    const sprite = new THREE.Sprite(material);
+    sprite.scale.set(2, 2, 1)
+    sprite.position.set(0,10,0)
+    sceneMain.add(sprite);
     // Handle resizing of the browser window.
     window.addEventListener("resize", handleResize, false);
     //initialiseGame();
