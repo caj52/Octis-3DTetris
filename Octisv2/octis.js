@@ -15,15 +15,14 @@ var localz;
 var ignoreInput = false;
 var cyclelength = 10;//miliseconds
 var check = false;
-var cube;
-const pBox = new THREE.Group();
-var predictionBoxInit;
+
 var scenes = [
     new THREE.AmbientLight((intensity = 1)),
     new THREE.AmbientLight((intensity = 0.7)),
     new THREE.AmbientLight((intensity = 0.5)),
     new THREE.AmbientLight((intensity = 0.2))
 ];
+var thisBlock;
 init();
 animate();
 document.addEventListener("keydown", handleKeyDown);
@@ -34,7 +33,6 @@ function init()
 /************VARIABLE-INITS****************/
     halfHeight = baseHeight / 2;
     halfWidth = baseWidth / 2;
-
     var startingBoxTop = [
         new THREE.Vector3(-halfWidth, baseHeight, -halfWidth),
         new THREE.Vector3(halfWidth, baseHeight, -halfWidth),
@@ -51,16 +49,6 @@ function init()
         new THREE.Vector3(halfWidth, 0, halfWidth),
         new THREE.Vector3(-halfWidth, baseHeight, halfWidth),
         new THREE.Vector3(-halfWidth, 0, halfWidth),
-    ];
-    predictionBoxInit = [
-        new THREE.Vector3(0, baseHeight,0),
-        new THREE.Vector3(0, 0, 0),
-        new THREE.Vector3(1, baseHeight, 0),
-        new THREE.Vector3(1, 0, 0),
-        new THREE.Vector3(1, baseHeight, 1),
-        new THREE.Vector3(1, 0, 1),
-        new THREE.Vector3(0, baseHeight, 1),
-        new THREE.Vector3(0, 0, 1),
     ];
 /*******************************************/
  /*****CAMERA VARIABLE INITIILIZATIONS******/
@@ -183,7 +171,7 @@ function handleKeyDown(event)
                 rotateGrid(false);
                 break;
             case 32: //SPACE
-                createCube();
+                b.createCube(b.getBlock(1));
                 break;
             case 38:
                 moveBlock('forward');
@@ -261,58 +249,6 @@ setInterval(function isRotating()
 }, 5);
 /////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////
-function createCube()
-{
-    var geometry = new THREE.BoxGeometry(1, 1, 1);
-    var col = getRandomColor();
-    const material = new THREE.MeshPhongMaterial({
-        color: col,
-        opacity: 0.5,
-        transparent: true,
-    });
-    cube = new THREE.Mesh(geometry, material);
-    sceneMain.add(cube);
-    cube.position.set(0.5, 10, 0.5);
-    createPredictionBox();
-}
-function createPredictionBox()
-{
-    var count = 0;
-    var lineCol = new THREE.LineBasicMaterial({ color: 0xffffff });
-    for (x = 0; x < 4;x++)
-    {
-        var geometry = new THREE.Geometry();
-        for (y = 0; y < 2; y++)
-        {
-            geometry.vertices.push(predictionBoxInit[count])
-            count++
-        }
-        var line = new THREE.Line(geometry, lineCol);
-        line.position = cube.position;
-        pBox.add(line); 
-    }
-    sceneMain.add(pBox);
-}
-
-function movePredictionBox()
-{
-    pBox.position.set(cube.position.x-.5, 0, cube.position.z-.5);
-
-}
-/////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////
-function getRandomColor()
-{
-    var letters = "0123456789ABCDEF";
-    var col = "#";
-    for (var i = 0; i < 6; i++)
-    {
-        col += letters[Math.floor(Math.random() * 16)];
-    }
-    return col;
-}
-/////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////
 function moveBlock(direction)
 {
     switch (direction)
@@ -321,16 +257,16 @@ function moveBlock(direction)
             switch (camposition)
             {
                 case 0:
-                    cube.position.x -= 1;
+                    thisBlock.position.x -= 1;
                     break;
                 case 1:
-                    cube.position.z -= 1;
+                    thisBlock.position.z -= 1;
                     break;
                 case 2:
-                    cube.position.x += 1;
+                    thisBlock.position.x += 1;
                     break;
                 case 3:
-                    cube.position.z += 1;
+                    thisBlock.position.z += 1;
                     break;
             }
             break;
@@ -338,16 +274,16 @@ function moveBlock(direction)
             switch (camposition)
             {
                 case 0:
-                    cube.position.x += 1;
+                    thisBlock.position.x += 1;
                     break;
                 case 1:
-                    cube.position.z += 1;
+                    thisBlock.position.z += 1;
                     break;
                 case 2:
-                    cube.position.x -= 1;
+                    thisBlock.position.x -= 1;
                     break;
                 case 3:
-                    cube.position.z -= 1;
+                    thisBlock.position.z -= 1;
                     break;
             }
             break;
@@ -355,16 +291,16 @@ function moveBlock(direction)
             switch (camposition)
             {
                 case 0:
-                    cube.position.z += 1;
+                    thisBlock.position.z += 1;
                     break;
                 case 1:
-                    cube.position.x -= 1;
+                    thisBlock.position.x -= 1;
                     break;
                 case 2:
-                    cube.position.z -= 1;
+                    thisBlock.position.z -= 1;
                     break;
                 case 3:
-                    cube.position.x += 1;
+                    thisBlock.position.x += 1;
                     break;
             }
             break;
@@ -372,16 +308,16 @@ function moveBlock(direction)
             switch (camposition)
             {
                 case 0:
-                    cube.position.z -= 1;
+                    thisBlock.position.z -= 1;
                     break;
                 case 1:
-                    cube.position.x += 1;
+                    thisBlock.position.x += 1;
                     break;
                 case 2:
-                    cube.position.z += 1;
+                    thisBlock.position.z += 1;
                     break;
                 case 3:
-                    cube.position.x -= 1;
+                    thisBlock.position.x -= 1;
                     break;
             }
             break;
